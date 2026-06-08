@@ -1,0 +1,436 @@
+:root{
+--ivory:#F7F5F2;
+--sage:#A8B5A2;
+--olive:#7E8D76;
+--taupe:#C8BFB6;
+--forest:#2F3E34;
+--white:#ffffff;
+--shadow:0 12px 30px rgba(47,62,52,.08);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:var(--ivory);
+color:var(--forest);
+min-height:100vh;
+}
+
+.container{
+width:min(1200px,90%);
+margin:auto;
+}
+
+.header{
+padding:30px 0;
+}
+
+.logo-section{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.logo-section img{
+width:150px;
+height:150px;
+object-fit:contain;
+}
+
+.logo-section h1{
+font-family:'Cormorant Garamond',serif;
+font-size:42px;
+font-weight:600;
+line-height:1;
+}
+
+.logo-section p{
+font-size:13px;
+letter-spacing:3px;
+text-transform:uppercase;
+color:var(--olive);
+margin-top:4px;
+}
+
+.main-section{
+padding:20px 0 60px;
+}
+
+.card-wrapper{
+display:grid;
+grid-template-columns:420px 1fr;
+gap:40px;
+align-items:start;
+}
+
+.form-card,
+.receipt-card,
+.saved-card{
+background:var(--white);
+border-radius:24px;
+box-shadow:var(--shadow);
+border:1px solid rgba(168,181,162,.25);
+}
+
+.form-card{
+padding:35px;
+}
+
+.form-card h2,
+.saved-card h2{
+font-family:'Cormorant Garamond',serif;
+font-size:38px;
+font-weight:600;
+margin-bottom:25px;
+}
+
+.form-group{
+margin-bottom:18px;
+}
+
+.form-group label{
+display:block;
+font-size:14px;
+font-weight:500;
+margin-bottom:8px;
+}
+
+.form-group input,
+.form-group select,
+.filters input,
+.filters select{
+width:100%;
+padding:14px 16px;
+border:1px solid rgba(168,181,162,.35);
+border-radius:14px;
+font-size:15px;
+background:#fff;
+outline:none;
+transition:.3s;
+font-family:'Inter',sans-serif;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.filters input:focus,
+.filters select:focus{
+border-color:var(--sage);
+box-shadow:0 0 0 4px rgba(168,181,162,.15);
+}
+
+input[readonly]{
+background:#f3f3f3;
+cursor:not-allowed;
+font-weight:600;
+}
+
+.form-card button,
+.receipt-buttons button,
+.action-btn{
+border:none;
+border-radius:14px;
+font-size:14px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+font-family:'Inter',sans-serif;
+}
+
+.form-card button{
+width:100%;
+padding:15px;
+background:var(--forest);
+color:#fff;
+margin-top:10px;
+}
+
+.form-card button:hover,
+.receipt-buttons button:hover,
+.action-btn:hover{
+transform:translateY(-2px);
+}
+
+.secondary-btn{
+background:rgba(168,181,162,.18) !important;
+color:var(--forest) !important;
+}
+
+.hidden{
+display:none !important;
+}
+
+.receipt-card{
+position:relative;
+overflow:hidden;
+padding:50px;
+}
+
+.watermark{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) rotate(-30deg);
+font-family:'Cormorant Garamond',serif;
+font-size:90px;
+font-weight:700;
+color:rgba(168,181,162,.06);
+pointer-events:none;
+white-space:nowrap;
+}
+
+.receipt-header{
+text-align:center;
+padding-bottom:30px;
+border-bottom:1px solid rgba(168,181,162,.25);
+margin-bottom:35px;
+}
+
+.receipt-header h2{
+font-family:'Cormorant Garamond',serif;
+font-size:52px;
+font-weight:600;
+}
+
+.receipt-header p{
+font-size:13px;
+letter-spacing:2px;
+text-transform:uppercase;
+color:var(--olive);
+margin-top:10px;
+}
+
+.receipt-content{
+display:flex;
+flex-direction:column;
+gap:16px;
+}
+
+.receipt-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 0;
+border-bottom:1px dashed rgba(168,181,162,.35);
+}
+
+.receipt-row span{
+font-size:15px;
+color:#666;
+}
+
+.receipt-row strong{
+font-size:15px;
+font-weight:600;
+color:var(--forest);
+}
+
+.thankyou{
+margin-top:35px;
+padding:22px;
+background:rgba(168,181,162,.12);
+border-radius:16px;
+text-align:center;
+font-family:'Cormorant Garamond',serif;
+font-size:28px;
+color:var(--forest);
+}
+
+.receipt-buttons{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-top:25px;
+}
+
+.receipt-buttons button{
+padding:14px;
+}
+
+.receipt-buttons button:nth-child(1){
+background:var(--forest);
+color:#fff;
+}
+
+.receipt-buttons button:nth-child(2){
+background:var(--sage);
+color:var(--forest);
+}
+
+.receipt-buttons button:nth-child(3){
+background:#e8efe5;
+color:var(--forest);
+}
+
+.saved-card{
+margin-top:40px;
+padding:30px;
+}
+
+.saved-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px;
+}
+
+.filters{
+display:grid;
+grid-template-columns:1fr 220px;
+gap:15px;
+margin-bottom:22px;
+}
+
+.table-wrapper{
+overflow-x:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:1150px;
+}
+
+thead{
+background:rgba(168,181,162,.15);
+}
+
+th{
+padding:16px;
+text-align:left;
+font-size:14px;
+font-weight:600;
+color:var(--forest);
+}
+
+td{
+padding:14px 16px;
+font-size:14px;
+color:#555;
+border-bottom:1px solid rgba(168,181,162,.15);
+vertical-align:middle;
+}
+
+tbody tr{
+transition:.3s;
+}
+
+tbody tr:hover{
+background:rgba(168,181,162,.08);
+}
+
+.status-badge{
+display:inline-block;
+padding:6px 10px;
+border-radius:999px;
+font-size:12px;
+font-weight:600;
+background:rgba(168,181,162,.18);
+color:var(--forest);
+}
+
+.actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.action-btn{
+padding:8px 11px;
+font-size:12px;
+border-radius:10px;
+}
+
+.edit-btn{
+background:rgba(168,181,162,.25);
+color:var(--forest);
+}
+
+.delete-btn{
+background:#f4dfdc;
+color:#7a2e25;
+}
+
+.whatsapp-btn{
+background:#e8efe5;
+color:var(--forest);
+}
+
+@media print{
+
+body{
+background:#fff;
+}
+
+.header,
+.form-card,
+.saved-card,
+.receipt-buttons{
+display:none;
+}
+
+.card-wrapper{
+display:block;
+}
+
+.receipt-card{
+box-shadow:none;
+border:none;
+padding:0;
+}
+
+}
+
+@media(max-width:992px){
+
+.card-wrapper{
+grid-template-columns:1fr;
+}
+
+.receipt-card{
+padding:35px;
+}
+
+.filters{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:768px){
+
+.logo-section h1{
+font-size:34px;
+}
+
+.form-card,
+.receipt-card,
+.saved-card{
+padding:22px;
+}
+
+.receipt-header h2{
+font-size:40px;
+}
+
+.thankyou{
+font-size:22px;
+}
+
+.receipt-buttons{
+grid-template-columns:1fr;
+}
+
+.watermark{
+font-size:55px;
+}
+
+table{
+min-width:1000px;
+}
+
+}
