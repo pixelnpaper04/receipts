@@ -6,19 +6,26 @@ window.onload = function(){
 };
 
 function generateReceiptNumber(){
+
+  let lastNumber = localStorage.getItem("lastReceiptNumber") || 0;
+
+  lastNumber++;
+
+  localStorage.setItem("lastReceiptNumber", lastNumber);
+
   let now = new Date();
 
   let year = now.getFullYear().toString().slice(-2);
   let month = String(now.getMonth() + 1).padStart(2, "0");
   let day = String(now.getDate()).padStart(2, "0");
-  let random = Math.floor(Math.random() * 900 + 100);
 
-  let receiptNo = "PP" + year + month + day + "-" + random;
+  let serial = String(lastNumber).padStart(3, "0");
+
+  let receiptNo = `PP${year}${month}${day}-${serial}`;
 
   document.getElementById("receiptNo").value = receiptNo;
   document.getElementById("rNo").innerText = receiptNo;
 }
-
 function generateReceipt(){
   let receiptNo = document.getElementById("receiptNo").value;
   let customerName = document.getElementById("customerName").value;
