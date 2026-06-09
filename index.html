@@ -56,9 +56,26 @@
       <input type="text" id="product" placeholder="Example: MDF Magnet">
     </div>
 
-    <div class="form-group">
-      <label>Quantity</label>
-      <input type="number" id="qty" placeholder="1">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Quantity</label>
+        <input type="number" id="qty" placeholder="1">
+      </div>
+
+      <div class="form-group">
+        <label>Unit</label>
+        <select id="unit">
+		  <option value="null">null</option>
+          <option value="Nos">Nos</option>
+          <option value="Sheets">Sheets</option>
+          <option value="Books">Books</option>
+          <option value="Sets">Sets</option>
+          <option value="Kits">Kits</option>
+          <option value="Sq Ft">Sq Ft</option>
+          <option value="Pieces">Pieces</option>
+		  <option value="Designing">Designing</option>
+        </select>
+      </div>
     </div>
 
     <div class="form-group">
@@ -185,6 +202,7 @@
           <th>Phone</th>
           <th>Product</th>
           <th>Qty</th>
+          <th>Unit</th>
           <th>Total</th>
           <th>Paid</th>
           <th>Balance</th>
