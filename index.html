@@ -1,206 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Pixel & Paper | Receipt Studio</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pixel & Paper | Orders & Receipts</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
-<header class="header">
-  <div class="container">
-    <div class="logo-section">
-      <img src="image/logo-01.png" alt="Pixel & Paper Logo">
+  <header class="topbar">
+    <div class="brand">
+      <img src="image/logo-01.png" alt="Pixel & Paper Logo" class="logo" />
       <div>
         <h1>Pixel & Paper</h1>
-        <p>Receipt Studio</p>
+        <p>Orders & Receipt Manager</p>
       </div>
     </div>
-  </div>
-</header>
+    <button class="ghost-btn" onclick="window.print()">Print Page</button>
+  </header>
 
-<section class="main-section">
-<div class="container">
+  <main class="app">
+    <section class="dashboard card">
+      <div class="dash-card">
+        <span>Total Sales</span>
+        <strong id="dashTotal">₹0</strong>
+      </div>
+      <div class="dash-card paid">
+        <span>Paid Amount</span>
+        <strong id="dashPaid">₹0</strong>
+      </div>
+      <div class="dash-card pending">
+        <span>Pending Balance</span>
+        <strong id="dashPending">₹0</strong>
+      </div>
+      <div class="circle-wrap">
+        <div class="circle" id="paidCircle"><span id="paidPercent">0%</span></div>
+        <p>Paid Progress</p>
+      </div>
+    </section>
 
-<div class="card-wrapper">
+    <section class="grid">
+      <form id="orderForm" class="card form-card">
+        <div class="section-title">
+          <h2 id="formTitle">Create Order / Receipt</h2>
+          <button type="button" class="clear-btn" id="resetBtn">New</button>
+        </div>
 
-  <div class="form-card">
-    <h2>Create Receipt</h2>
+        <input type="hidden" id="editId" />
 
-    <div class="form-group">
-      <label>Receipt Number</label>
-      <input type="text" id="receiptNo" readonly>
-    </div>
+        <label>Receipt Number</label>
+        <input id="receiptNo" readonly />
+        <small>Receipt number is created only when you save an order.</small>
 
-    <div class="form-group">
-      <label>Customer Name</label>
-      <input type="text" id="customerName" placeholder="Enter customer name">
-    </div>
+        <label>Customer Name</label>
+        <input id="customerName" required placeholder="Customer name" />
 
-    <div class="form-group">
-      <label>Phone Number</label>
-      <input type="text" id="phone" placeholder="Enter WhatsApp number">
-    </div>
+        <label>Phone Number</label>
+        <input id="phone" required placeholder="10 digit WhatsApp number" />
 
-    <div class="form-group">
-      <label>Product / Order Details</label>
-      <input type="text" id="product" placeholder="Example: MDF Magnet">
-    </div>
+        <label>Product / Order Details</label>
+        <textarea id="product" required placeholder="Example: Name stickers, acrylic keychain, bookmarks"></textarea>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label>Quantity</label>
-        <input type="number" id="qty" placeholder="1">
+        <div class="two-col">
+          <div>
+            <label>Quantity</label>
+            <input id="quantity" type="number" min="1" value="1" required />
+          </div>
+          <div>
+            <label>Unit</label>
+            <select id="unit">
+              <option>Nos</option>
+              <option>Sheets</option>
+              <option>Books</option>
+              <option>Sets</option>
+              <option>Kits</option>
+              <option>Sq Ft</option>
+              <option>Pieces</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label>Per Item Price</label>
+            <input id="priceEach" type="number" min="0" step="0.01" placeholder="Example: 40" />
+          </div>
+          <div>
+            <label>Total Amount</label>
+            <input id="totalAmount" type="number" min="0" step="0.01" required placeholder="Auto calculated" />
+          </div>
+        </div>
+        <small>You can type per item price to auto-calculate total, or directly edit total amount.</small>
+
+        <label>Advance / Amount Paid</label>
+        <input id="advancePaid" type="number" min="0" step="0.01" value="0" />
+
+        <div class="two-col">
+          <div>
+            <label>Payment Status</label>
+            <select id="paymentStatus">
+              <option>Unpaid</option>
+              <option>Partially Paid</option>
+              <option>Paid</option>
+            </select>
+          </div>
+          <div>
+            <label>Order Status</label>
+            <select id="orderStatus">
+              <option>Designing</option>
+              <option>Printing</option>
+              <option>In Production</option>
+              <option>Ready</option>
+              <option>Delivered</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Notes</label>
+        <textarea id="notes" placeholder="Payment date, delivery details, custom instructions"></textarea>
+
+        <div class="summary-line">
+          <span>Balance</span>
+          <strong id="balanceText">₹0</strong>
+        </div>
+
+        <button type="submit" class="primary-btn" id="saveBtn">Save Order</button>
+      </form>
+
+      <section class="card receipt-card" id="receiptArea">
+        <div class="receipt-head">
+          <img src="image/logo-01.png" alt="Pixel & Paper Logo" />
+          <h2>Pixel & Paper</h2>
+          <p>Receipt</p>
+        </div>
+        <div class="receipt-body">
+          <p><span>Receipt No</span><strong id="rReceiptNo">-</strong></p>
+          <p><span>Customer</span><strong id="rCustomer">-</strong></p>
+          <p><span>Phone</span><strong id="rPhone">-</strong></p>
+          <p><span>Product</span><strong id="rProduct">-</strong></p>
+          <p><span>Quantity</span><strong id="rQty">-</strong></p>
+          <p><span>Total</span><strong id="rTotal">₹0</strong></p>
+          <p><span>Balance</span><strong id="rBalance">₹0</strong></p>
+          <p><span>Payment Status</span><strong id="rPayment">-</strong></p>
+          <p><span>Order Status</span><strong id="rOrder">-</strong></p>
+          <p><span>Notes</span><strong id="rNotes">-</strong></p>
+        </div>
+        <p class="thanks">Thank you for supporting handmade creativity ♡</p>
+        <div class="receipt-actions">
+          <button class="primary-btn" id="printReceiptBtn">Print Receipt</button>
+          <button class="whatsapp-btn" id="whatsappPreviewBtn">Send on WhatsApp</button>
+        </div>
+      </section>
+    </section>
+
+    <section class="card table-card">
+      <div class="table-top">
+        <h2>Saved Orders</h2>
+        <div class="filters">
+          <input id="searchInput" placeholder="Search orders" />
+          <select id="paymentFilter">
+            <option value="All">All Payments</option>
+            <option>Unpaid</option>
+            <option>Partially Paid</option>
+            <option>Paid</option>
+          </select>
+          <select id="orderFilter">
+            <option value="All">All Status</option>
+            <option>Designing</option>
+            <option>Printing</option>
+            <option>In Production</option>
+            <option>Ready</option>
+            <option>Delivered</option>
+          </select>
+          <button class="ghost-btn" id="downloadExcelBtn">Download Excel</button>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Unit</label>
-        <select id="unit">
-		  <option value="Null">Null</option>
-		  <option value="Designing">Designing</option>
-          <option value="Nos">Nos</option>
-          <option value="Sheets">Sheets</option>
-          <option value="Books">Books</option>
-          <option value="Sets">Sets</option>
-          <option value="Kits">Kits</option>
-          <option value="Sq Ft">Sq Ft</option>
-          <option value="Pieces">Pieces</option>
-        </select>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Receipt No</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Phone</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th>Balance</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTable"></tbody>
+        </table>
       </div>
-    </div>
+    </section>
+  </main>
 
-    <div class="form-group">
-      <label>Total Amount ₹</label>
-      <input type="number" id="total" placeholder="0">
-    </div>
-
-    <div class="form-group">
-      <label>Advance Paid ₹</label>
-      <input type="number" id="paid" placeholder="0">
-    </div>
-
-    <div class="form-group">
-      <label>Payment Status</label>
-      <select id="paymentStatus">
-        <option>Unpaid</option>
-        <option>Partially Paid</option>
-        <option>Paid</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Order Status</label>
-      <select id="status">
-        <option>Designing</option>
-        <option>Printing</option>
-        <option>In Production</option>
-        <option>Ready</option>
-        <option>Delivered</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Notes</label>
-      <textarea id="notes" rows="4" placeholder="Payment date, UPI reference, delivery details, customer request..."></textarea>
-    </div>
-
-    <button onclick="saveReceipt()" id="saveBtn">Save Receipt</button>
-    <button onclick="updateReceipt()" id="updateBtn" class="hidden">Update Receipt</button>
-    <button onclick="clearForm()" type="button" class="secondary-btn">Clear Form</button>
-  </div>
-
-  <div class="receipt-card" id="receipt">
-    <div class="watermark">PIXEL & PAPER</div>
-
-    <div class="receipt-header">
-      <h2>Pixel & Paper</h2>
-      <p>Branding • Stickers • Gifting • Art</p>
-    </div>
-
-    <div class="receipt-content">
-
-      <div class="receipt-row"><span>Receipt No</span><strong id="rNo">-</strong></div>
-      <div class="receipt-row"><span>Customer</span><strong id="rName">-</strong></div>
-      <div class="receipt-row"><span>Phone</span><strong id="rPhone">-</strong></div>
-      <div class="receipt-row"><span>Product</span><strong id="rProduct">-</strong></div>
-      <div class="receipt-row"><span>Quantity</span><strong id="rQty">-</strong></div>
-      <div class="receipt-row"><span>Total</span><strong id="rTotal">₹0</strong></div>
-      <div class="receipt-row"><span>Balance</span><strong id="rBalance">₹0</strong></div>
-      <div class="receipt-row"><span>Payment</span><strong id="rPaymentStatus">-</strong></div>
-      <div class="receipt-row"><span>Status</span><strong id="rStatus">-</strong></div>
-      <div class="receipt-row"><span>Notes</span><strong id="rNotes">-</strong></div>
-
-    </div>
-
-    <div class="thankyou">
-      Thank you for supporting handmade creativity ♡
-    </div>
-
-    <div class="receipt-buttons">
-      <button onclick="window.print()">Print / PDF</button>
-      <button onclick="sendWhatsApp()">WhatsApp</button>
-      <button onclick="exportToExcel()">Export CSV</button>
-    </div>
-  </div>
-
-</div>
-
-<div class="saved-card">
-  <div class="saved-header">
-    <h2>Saved Receipts</h2>
-  </div>
-
-  <div class="filters">
-    <input type="text" id="searchInput" placeholder="Search by customer, phone, product or receipt no" onkeyup="loadReceipts()">
-
-    <select id="statusFilter" onchange="loadReceipts()">
-      <option value="All">All Status</option>
-      <option value="Designing">Designing</option>
-      <option value="Printing">Printing</option>
-      <option value="In Production">In Production</option>
-      <option value="Ready">Ready</option>
-      <option value="Delivered">Delivered</option>
-    </select>
-  </div>
-
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Receipt No</th>
-          <th>Date</th>
-          <th>Customer</th>
-          <th>Phone</th>
-          <th>Product</th>
-          <th>Quantity</th>
-          <th>Unit</th>
-          <th>Total</th>
-          <th>Balance</th>
-          <th>Payment</th>
-          <th>Status</th>
-          <th>Notes</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-
-      <tbody id="receiptTable"></tbody>
-    </table>
-  </div>
-</div>
-
-</div>
-</section>
-
-<script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>
