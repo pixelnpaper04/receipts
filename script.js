@@ -21,6 +21,27 @@ function generateReceiptNumber() {
     document.getElementById("rNo").innerText = receiptNo;
 }
 
+function calculatePayment(total, paid, paymentStatus) {
+    if (paymentStatus === "Paid") {
+        paid = total;
+    }
+
+    if (paymentStatus === "Unpaid") {
+        paid = 0;
+    }
+
+    let balance = total - paid;
+
+    if (balance < 0) {
+        balance = 0;
+    }
+
+    return {
+        paid: paid,
+        balance: balance
+    };
+}
+
 function generateReceipt() {
     let receiptNo = document.getElementById("receiptNo").value;
     let customerName = document.getElementById("customerName").value;
@@ -28,9 +49,13 @@ function generateReceipt() {
     let product = document.getElementById("product").value;
     let qty = document.getElementById("qty").value || "1";
     let unit = document.getElementById("unit").value;
+
     let total = Number(document.getElementById("total").value) || 0;
-    let balance = total - paid;
+    let paid = Number(document.getElementById("paid").value) || 0;
     let paymentStatus = document.getElementById("paymentStatus").value;
+
+    let payment = calculatePayment(total, paid, paymentStatus);
+
     let status = document.getElementById("status").value;
     let notes = document.getElementById("notes").value;
 
@@ -40,7 +65,8 @@ function generateReceipt() {
     document.getElementById("rProduct").innerText = product || "-";
     document.getElementById("rQty").innerText = qty + " " + unit;
     document.getElementById("rTotal").innerText = "₹" + total;
-    document.getElementById("rBalance").innerText = "₹" + balance;
+    document.getElementById("rPaid").innerText = "₹" + payment.paid;
+    document.getElementById("rBalance").innerText = "₹" + payment.balance;
     document.getElementById("rPaymentStatus").innerText = paymentStatus;
     document.getElementById("rStatus").innerText = status;
     document.getElementById("rNotes").innerText = notes || "-";
@@ -53,6 +79,9 @@ function getReceipts() {
 function getReceiptData() {
     let total = Number(document.getElementById("total").value) || 0;
     let paid = Number(document.getElementById("paid").value) || 0;
+    let paymentStatus = document.getElementById("paymentStatus").value;
+
+    let payment = calculatePayment(total, paid, paymentStatus);
 
     return {
         receiptNo: document.getElementById("receiptNo").value,
@@ -63,9 +92,9 @@ function getReceiptData() {
         qty: document.getElementById("qty").value || "1",
         unit: document.getElementById("unit").value,
         total: "₹" + total,
-        paid: "₹" + paid,
-        balance: "₹" + (total - paid),
-        paymentStatus: document.getElementById("paymentStatus").value,
+        paid: "₹" + payment.paid,
+        balance: "₹" + payment.balance,
+        paymentStatus: paymentStatus,
         status: document.getElementById("status").value,
         notes: document.getElementById("notes").value.trim()
     };
@@ -138,6 +167,7 @@ function loadReceipts() {
             <td>${receipt.qty}</td>
             <td>${receipt.unit}</td>
             <td>${receipt.total}</td>
+            <td>${receipt.paid}</td>
             <td>${receipt.balance}</td>
             <td><span class="status-badge">${receipt.paymentStatus || "-"}</span></td>
             <td><span class="status-badge">${receipt.status}</span></td>
@@ -173,6 +203,7 @@ function editReceipt(receiptNo) {
     document.getElementById("qty").value = receipt.qty;
     document.getElementById("unit").value = receipt.unit || "Nos";
     document.getElementById("total").value = receipt.total.replace("₹", "");
+    document.getElementById("paid").value = receipt.paid.replace("₹", "");
     document.getElementById("paymentStatus").value = receipt.paymentStatus || "Unpaid";
     document.getElementById("status").value = receipt.status;
     document.getElementById("notes").value = receipt.notes || "";
@@ -233,7 +264,7 @@ function exportToExcel() {
         return;
     }
 
-    let csv = "Receipt No,Date,Customer,Phone,Product,Quantity,Unit,Total,Balance,Payment Status,Order Status,Notes\n";
+    let csv = "Receipt No,Date,Customer,Phone,Product,Quantity,Unit,Total,Paid,Balance,Payment Status,Order Status,Notes\n";
 
     receipts.forEach(function (r) {
         csv += `"${r.receiptNo}","${r.date}","${r.customer}","${r.phone}","${r.product}","${r.qty}","${r.unit}","${r.total}","${r.paid}","${r.balance}","${r.paymentStatus || ""}","${r.status}","${r.notes || ""}"\n`;
@@ -288,6 +319,7 @@ Customer: ${receipt.customer}
 Product: ${receipt.product}
 Quantity: ${receipt.qty} ${receipt.unit}
 Total: ${receipt.total}
+Paid: ${receipt.paid}
 Balance: ${receipt.balance}
 Payment Status: ${receipt.paymentStatus}
 Order Status: ${receipt.status}
@@ -308,6 +340,7 @@ function clearForm() {
     document.getElementById("qty").value = "";
     document.getElementById("unit").value = "Nos";
     document.getElementById("total").value = "";
+    document.getElementById("paid").value = "";
     document.getElementById("paymentStatus").value = "Unpaid";
     document.getElementById("status").value = "Designing";
     document.getElementById("notes").value = "";
@@ -320,6 +353,7 @@ function clearForm() {
     document.getElementById("rProduct").innerText = "-";
     document.getElementById("rQty").innerText = "-";
     document.getElementById("rTotal").innerText = "₹0";
+    document.getElementById("rPaid").innerText = "₹0";
     document.getElementById("rBalance").innerText = "₹0";
     document.getElementById("rPaymentStatus").innerText = "-";
     document.getElementById("rStatus").innerText = "-";
