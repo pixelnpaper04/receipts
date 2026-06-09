@@ -489,3 +489,29 @@ text-align:right;
 line-height:1.5;
 white-space:pre-wrap;
 }
+/* Fix action buttons column */
+th:last-child,
+td:last-child{
+min-width:260px;
+position:sticky;
+right:0;
+background:#fff;
+z-index:2;
+}
+
+thead th:last-child{
+background:#eef0ed;
+z-index:3;
+}
+
+.actions{
+display:flex;
+flex-direction:column;
+gap:8px;
+align-items:flex-start;
+}
+
+.action-btn{
+width:90px;
+text-align:center;
+}
