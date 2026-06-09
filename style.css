@@ -466,3 +466,26 @@ min-width:1000px;
 }
 
 }
+.form-group textarea{
+width:100%;
+padding:14px 16px;
+border:1px solid rgba(168,181,162,.35);
+border-radius:14px;
+font-size:15px;
+font-family:'Inter',sans-serif;
+resize:vertical;
+min-height:100px;
+outline:none;
+}
+
+.form-group textarea:focus{
+border-color:var(--sage);
+box-shadow:0 0 0 4px rgba(168,181,162,.15);
+}
+
+#rNotes{
+max-width:300px;
+text-align:right;
+line-height:1.5;
+white-space:pre-wrap;
+}

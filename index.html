@@ -66,6 +66,7 @@
         <label>Unit</label>
         <select id="unit">
 		  <option value="Null">Null</option>
+		  <option value="Designing">Designing</option>
           <option value="Nos">Nos</option>
           <option value="Sheets">Sheets</option>
           <option value="Books">Books</option>
@@ -73,7 +74,6 @@
           <option value="Kits">Kits</option>
           <option value="Sq Ft">Sq Ft</option>
           <option value="Pieces">Pieces</option>
-		  <option value="Designing">Designing</option>
         </select>
       </div>
     </div>
@@ -89,6 +89,15 @@
     </div>
 
     <div class="form-group">
+      <label>Payment Status</label>
+      <select id="paymentStatus">
+        <option>Unpaid</option>
+        <option>Partially Paid</option>
+        <option>Paid</option>
+      </select>
+    </div>
+
+    <div class="form-group">
       <label>Order Status</label>
       <select id="status">
         <option>Designing</option>
@@ -97,6 +106,11 @@
         <option>Ready</option>
         <option>Delivered</option>
       </select>
+    </div>
+
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="notes" rows="4" placeholder="Payment date, UPI reference, delivery details, customer request..."></textarea>
     </div>
 
     <button onclick="saveReceipt()" id="saveBtn">Save Receipt</button>
@@ -114,50 +128,16 @@
 
     <div class="receipt-content">
 
-      <div class="receipt-row">
-        <span>Receipt No</span>
-        <strong id="rNo">-</strong>
-      </div>
-
-      <div class="receipt-row">
-        <span>Customer</span>
-        <strong id="rName">-</strong>
-      </div>
-
-      <div class="receipt-row">
-        <span>Phone</span>
-        <strong id="rPhone">-</strong>
-      </div>
-
-      <div class="receipt-row">
-        <span>Product</span>
-        <strong id="rProduct">-</strong>
-      </div>
-
-      <div class="receipt-row">
-        <span>Quantity</span>
-        <strong id="rQty">-</strong>
-      </div>
-
-      <div class="receipt-row">
-        <span>Total</span>
-        <strong id="rTotal">₹0</strong>
-      </div>
-
-      <div class="receipt-row">
-        <span>Paid</span>
-        <strong id="rPaid">₹0</strong>
-      </div>
-
-      <div class="receipt-row">
-        <span>Balance</span>
-        <strong id="rBalance">₹0</strong>
-      </div>
-
-      <div class="receipt-row">
-        <span>Status</span>
-        <strong id="rStatus">-</strong>
-      </div>
+      <div class="receipt-row"><span>Receipt No</span><strong id="rNo">-</strong></div>
+      <div class="receipt-row"><span>Customer</span><strong id="rName">-</strong></div>
+      <div class="receipt-row"><span>Phone</span><strong id="rPhone">-</strong></div>
+      <div class="receipt-row"><span>Product</span><strong id="rProduct">-</strong></div>
+      <div class="receipt-row"><span>Quantity</span><strong id="rQty">-</strong></div>
+      <div class="receipt-row"><span>Total</span><strong id="rTotal">₹0</strong></div>
+      <div class="receipt-row"><span>Balance</span><strong id="rBalance">₹0</strong></div>
+      <div class="receipt-row"><span>Payment</span><strong id="rPaymentStatus">-</strong></div>
+      <div class="receipt-row"><span>Status</span><strong id="rStatus">-</strong></div>
+      <div class="receipt-row"><span>Notes</span><strong id="rNotes">-</strong></div>
 
     </div>
 
@@ -201,12 +181,13 @@
           <th>Customer</th>
           <th>Phone</th>
           <th>Product</th>
-          <th>Qty</th>
+          <th>Quantity</th>
           <th>Unit</th>
           <th>Total</th>
-          <th>Paid</th>
           <th>Balance</th>
+          <th>Payment</th>
           <th>Status</th>
+          <th>Notes</th>
           <th>Actions</th>
         </tr>
       </thead>

@@ -10,11 +10,9 @@ function generateReceiptNumber() {
     let nextNumber = lastNumber + 1;
 
     let now = new Date();
-
     let year = now.getFullYear().toString().slice(-2);
     let month = String(now.getMonth() + 1).padStart(2, "0");
     let day = String(now.getDate()).padStart(2, "0");
-
     let serial = String(nextNumber).padStart(3, "0");
 
     let receiptNo = `PP${year}${month}${day}-${serial}`;
@@ -31,10 +29,10 @@ function generateReceipt() {
     let qty = document.getElementById("qty").value || "1";
     let unit = document.getElementById("unit").value;
     let total = Number(document.getElementById("total").value) || 0;
-    let paid = Number(document.getElementById("paid").value) || 0;
-    let status = document.getElementById("status").value;
-
     let balance = total - paid;
+    let paymentStatus = document.getElementById("paymentStatus").value;
+    let status = document.getElementById("status").value;
+    let notes = document.getElementById("notes").value;
 
     document.getElementById("rNo").innerText = receiptNo;
     document.getElementById("rName").innerText = customerName || "-";
@@ -42,9 +40,10 @@ function generateReceipt() {
     document.getElementById("rProduct").innerText = product || "-";
     document.getElementById("rQty").innerText = qty + " " + unit;
     document.getElementById("rTotal").innerText = "₹" + total;
-    document.getElementById("rPaid").innerText = "₹" + paid;
     document.getElementById("rBalance").innerText = "₹" + balance;
+    document.getElementById("rPaymentStatus").innerText = paymentStatus;
     document.getElementById("rStatus").innerText = status;
+    document.getElementById("rNotes").innerText = notes || "-";
 }
 
 function getReceipts() {
@@ -66,7 +65,9 @@ function getReceiptData() {
         total: "₹" + total,
         paid: "₹" + paid,
         balance: "₹" + (total - paid),
-        status: document.getElementById("status").value
+        paymentStatus: document.getElementById("paymentStatus").value,
+        status: document.getElementById("status").value,
+        notes: document.getElementById("notes").value.trim()
     };
 }
 
@@ -75,11 +76,7 @@ function saveReceipt() {
 
     let receipt = getReceiptData();
 
-    if (
-        receipt.customer === "" ||
-        receipt.phone === "" ||
-        receipt.product === ""
-    ) {
+    if (receipt.customer === "" || receipt.phone === "" || receipt.product === "") {
         alert("Please fill customer name, phone number and product details.");
         return;
     }
@@ -96,7 +93,6 @@ function saveReceipt() {
     }
 
     receipts.push(receipt);
-
     localStorage.setItem("receipts", JSON.stringify(receipts));
 
     let lastNumber = parseInt(localStorage.getItem("lastReceiptNumber")) || 0;
@@ -118,7 +114,6 @@ function loadReceipts() {
     let filter = statusFilter ? statusFilter.value : "All";
 
     let table = document.getElementById("receiptTable");
-
     table.innerHTML = "";
 
     receipts.forEach(function (receipt) {
@@ -126,10 +121,10 @@ function loadReceipts() {
             receipt.receiptNo.toLowerCase().includes(search) ||
             receipt.customer.toLowerCase().includes(search) ||
             receipt.phone.toLowerCase().includes(search) ||
-            receipt.product.toLowerCase().includes(search);
+            receipt.product.toLowerCase().includes(search) ||
+            (receipt.notes || "").toLowerCase().includes(search);
 
-        let matchStatus =
-            filter === "All" || receipt.status === filter;
+        let matchStatus = filter === "All" || receipt.status === filter;
 
         if (!matchSearch || !matchStatus) return;
 
@@ -143,9 +138,10 @@ function loadReceipts() {
             <td>${receipt.qty}</td>
             <td>${receipt.unit}</td>
             <td>${receipt.total}</td>
-            <td>${receipt.paid}</td>
             <td>${receipt.balance}</td>
+            <td><span class="status-badge">${receipt.paymentStatus || "-"}</span></td>
             <td><span class="status-badge">${receipt.status}</span></td>
+            <td>${receipt.notes || "-"}</td>
             <td>
                 <div class="actions">
                     <button class="action-btn edit-btn" onclick="editReceipt('${receipt.receiptNo}')">Edit</button>
@@ -159,9 +155,7 @@ function loadReceipts() {
 }
 
 function editReceipt(receiptNo) {
-    let receipts = getReceipts();
-
-    let receipt = receipts.find(function (r) {
+    let receipt = getReceipts().find(function (r) {
         return r.receiptNo === receiptNo;
     });
 
@@ -179,18 +173,16 @@ function editReceipt(receiptNo) {
     document.getElementById("qty").value = receipt.qty;
     document.getElementById("unit").value = receipt.unit || "Nos";
     document.getElementById("total").value = receipt.total.replace("₹", "");
-    document.getElementById("paid").value = receipt.paid.replace("₹", "");
+    document.getElementById("paymentStatus").value = receipt.paymentStatus || "Unpaid";
     document.getElementById("status").value = receipt.status;
+    document.getElementById("notes").value = receipt.notes || "";
 
     generateReceipt();
 
     document.getElementById("saveBtn").classList.add("hidden");
     document.getElementById("updateBtn").classList.remove("hidden");
 
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function updateReceipt() {
@@ -203,13 +195,8 @@ function updateReceipt() {
 
     let updatedReceipt = getReceiptData();
 
-    let receipts = getReceipts();
-
-    receipts = receipts.map(function (receipt) {
-        if (receipt.receiptNo === editingReceiptNo) {
-            return updatedReceipt;
-        }
-        return receipt;
+    let receipts = getReceipts().map(function (receipt) {
+        return receipt.receiptNo === editingReceiptNo ? updatedReceipt : receipt;
     });
 
     localStorage.setItem("receipts", JSON.stringify(receipts));
@@ -228,14 +215,11 @@ function updateReceipt() {
 function deleteReceipt(receiptNo) {
     if (!confirm("Delete this receipt?")) return;
 
-    let receipts = getReceipts();
-
-    receipts = receipts.filter(function (receipt) {
+    let receipts = getReceipts().filter(function (receipt) {
         return receipt.receiptNo !== receiptNo;
     });
 
     localStorage.setItem("receipts", JSON.stringify(receipts));
-
     loadReceipts();
 
     alert("Receipt deleted successfully!");
@@ -249,11 +233,10 @@ function exportToExcel() {
         return;
     }
 
-    let csv =
-        "Receipt No,Date,Customer,Phone,Product,Quantity,Unit,Total,Paid,Balance,Status\n";
+    let csv = "Receipt No,Date,Customer,Phone,Product,Quantity,Unit,Total,Balance,Payment Status,Order Status,Notes\n";
 
     receipts.forEach(function (r) {
-        csv += `"${r.receiptNo}","${r.date}","${r.customer}","${r.phone}","${r.product}","${r.qty}","${r.unit}","${r.total}","${r.paid}","${r.balance}","${r.status}"\n`;
+        csv += `"${r.receiptNo}","${r.date}","${r.customer}","${r.phone}","${r.product}","${r.qty}","${r.unit}","${r.total}","${r.paid}","${r.balance}","${r.paymentStatus || ""}","${r.status}","${r.notes || ""}"\n`;
     });
 
     let blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -305,9 +288,10 @@ Customer: ${receipt.customer}
 Product: ${receipt.product}
 Quantity: ${receipt.qty} ${receipt.unit}
 Total: ${receipt.total}
-Paid: ${receipt.paid}
 Balance: ${receipt.balance}
-Status: ${receipt.status}
+Payment Status: ${receipt.paymentStatus}
+Order Status: ${receipt.status}
+Notes: ${receipt.notes || "-"}
 
 Thank you for supporting handmade creativity ♡`
     );
@@ -324,8 +308,9 @@ function clearForm() {
     document.getElementById("qty").value = "";
     document.getElementById("unit").value = "Nos";
     document.getElementById("total").value = "";
-    document.getElementById("paid").value = "";
+    document.getElementById("paymentStatus").value = "Unpaid";
     document.getElementById("status").value = "Designing";
+    document.getElementById("notes").value = "";
 
     document.getElementById("saveBtn").classList.remove("hidden");
     document.getElementById("updateBtn").classList.add("hidden");
@@ -335,9 +320,10 @@ function clearForm() {
     document.getElementById("rProduct").innerText = "-";
     document.getElementById("rQty").innerText = "-";
     document.getElementById("rTotal").innerText = "₹0";
-    document.getElementById("rPaid").innerText = "₹0";
     document.getElementById("rBalance").innerText = "₹0";
+    document.getElementById("rPaymentStatus").innerText = "-";
     document.getElementById("rStatus").innerText = "-";
+    document.getElementById("rNotes").innerText = "-";
 
     generateReceiptNumber();
 }
